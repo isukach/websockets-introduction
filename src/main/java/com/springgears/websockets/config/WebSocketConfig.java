@@ -1,6 +1,7 @@
 package com.springgears.websockets.config;
 
 import com.springgears.websockets.handler.GreetingsMessageHandler;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -8,11 +9,14 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
+@AllArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
+
+    private GreetingsMessageHandler greetingsMessageHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new GreetingsMessageHandler(), "/greeting")
+        registry.addHandler(greetingsMessageHandler, "/greeting")
                 .setAllowedOrigins("*");
     }
 }

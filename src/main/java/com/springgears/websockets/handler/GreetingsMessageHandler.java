@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Slf4j
+@Component
 public class GreetingsMessageHandler extends TextWebSocketHandler {
 
     private List<WebSocketSession> establishedSessions = new CopyOnWriteArrayList<>();
@@ -31,6 +33,10 @@ public class GreetingsMessageHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         establishedSessions.forEach(establishedSession
                 -> sendMessageToClient(message, establishedSession));
+    }
+
+    public void sendToAll(String message) {
+        establishedSessions.forEach(session -> sendMessageToClient(new TextMessage(message), session));
     }
 
     private void sendMessageToClient(TextMessage message,
